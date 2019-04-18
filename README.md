@@ -29,7 +29,7 @@ site.scrape().then(console.log)
 
 `ts-node index.ts` will produce:
 
-```json
+```
 {
     key1: 'html content from span with an id of #key1selector',
     key2: 'html content from span with an id of #key2selector',
