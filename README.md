@@ -37,10 +37,11 @@ site.scrape().then(console.log)
 ```
 
 # TODO
-- Unit Tests
-- Add root configs (tslint, tsconfig, etc)
-- Scraper Pagination
-- Remove axios, replace with custom `HttpService` class
-- Expand sanitization of retrieved values
-- Possibly move to headless chrome, Puppeteer
-- Add to NPM
+1. Scraper Pagination
+1. Scraper Job
+1. Remove axios, replace with custom `HttpService` class
+1. Expand sanitization of retrieved values
+1. Add root configs (tslint, tsconfig, etc)
+1. Unit Tests
+1. Possibly move to headless chrome, Puppeteer
+1. Add to NPM
