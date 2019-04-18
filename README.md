@@ -1,9 +1,8 @@
 # Scraper
 
-Scrape data from a website, pass an object with `{key: '#selector'}` and receive `{key: 'selector value'}`
-
 > WIP
 
+Scrape data from a website, pass an object with `{key: '#selector'}` and receive `{key: 'selector value'}`
 
 # Requirements
 
@@ -16,7 +15,7 @@ Scrape data from a website, pass an object with `{key: '#selector'}` and receive
 // index.ts
 import Scraper from './lib/classes/Scraper'
 const config = {
-    uri: 'http://example.html',
+    uri: 'http://example.com',
     selectors: {
         key1: 'span#key1selector',
         key2: 'span#key2selector',
@@ -39,6 +38,9 @@ site.scrape().then(console.log)
 
 # TODO
 - Unit Tests
+- Add root configs (tslint, tsconfig, etc)
 - Scraper Pagination
-- Remove axios, replace with custom `HttpService`
+- Remove axios, replace with custom `HttpService` class
 - Expand sanitization of retrieved values
+- Possibly move to headless chrome, Puppeteer
+- Add to NPM
