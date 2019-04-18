@@ -38,8 +38,16 @@ site.scrape().then(console.log)
 
 # TODO
 1. Scraper Pagination
+    - create `baseUri` from `uri`
+    - create `path` from `uri`
+    - define `paginationPath` selector
+    - parse value returned from `paginationPath` selector
+    - ...
 1. Scraper Job
-1. Remove axios, replace with custom `HttpService` class
+    - define `frequency`
+    - ...
+1. Remove axios
+    - create `HttpService` class
 1. Expand sanitization of retrieved values
 1. Add root configs (tslint, tsconfig, etc)
 1. Unit Tests
