@@ -4,6 +4,14 @@
 
 Scrape data from a website, pass an object with `{key: '#selector'}` and receive `{key: 'selector value'}`
 
+## Goals of Project
+
+- Create `SiteModel` that will be fed into a new Scraper Class
+- Scraper class will accept a URI and a an object defining what to scrape
+- An optional pagination selector may be passed into the Scraper Class to enable pagination
+- 
+
+
 # Requirements
 
 * `npm i -g ts-node` or  `npm i -D ts-node`

@@ -5,7 +5,9 @@
  */
 export const cloneObjectUpdateValues = async (object: object, callback: (s: string) => void) => {
     const clone = new Object
-    await Object.keys(object).map(key => clone[key] = callback(object[key]))
+    for (const key of Object.keys(object)) {
+        clone[key] = await callback(object[key])
+    }
     return clone
 }
 
