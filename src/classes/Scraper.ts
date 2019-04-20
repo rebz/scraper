@@ -6,9 +6,10 @@ import { cloneObjectUpdateValues, cleanScrapedValue } from '../helpers/scrape'
 @injectable()
 export default class Scraper {
 
-    protected $data: object;        // selector values
-    protected $uri: string;         // config
-    protected $selectors: object;   // config
+    protected $data: object;                // selector values
+    protected $uri: string;                 // config
+    protected $selectors: object;           // config
+    protected $paginationSelector: string;  // selector value
     
     public browserService: BrowserService;
 
@@ -26,6 +27,7 @@ export default class Scraper {
     public setConfig(config: ScrapeSiteInterface) {
         this.$uri = config.uri
         this.$selectors = config.selectors
+        this.$paginationSelector = config.paginationSelector
         return this
     }
 
@@ -33,10 +35,15 @@ export default class Scraper {
      * Returns scraped data, determined by config
      */
     public async scrape() {
-        const selectorCheck = this.$selectors[Object.keys(this.$selectors)[0]] // get first element selector
-        await this.browserService.goTo(this.$uri, selectorCheck)
+        await this.goToPage()
         await this.retrieveSelectorValues()
         return Promise.resolve(this);
+    }
+
+    public async goToPage(uri?: string) {
+        if (uri) this.$uri = uri
+        const selectorCheck = this.$selectors[Object.keys(this.$selectors)[0]] // get first element selector
+        await this.browserService.goTo(this.$uri, selectorCheck)
     }
 
     private async retrieveSelectorValues() {
@@ -51,21 +58,29 @@ export default class Scraper {
     }
 
 
-
-    private returnInstance() {
-        // return this
-    }
-
-    public async stop() {
-        await this.browserService.closeBrowser();
+    
+    /**
+     *  Checks if there is an additional page to scrape
+     */
+    public async hasNext() {
+        if (!this.$paginationSelector) {
+            return false
+        }
+        return await this.browserService.hasSelector(this.$paginationSelector)        
     }
 
 
     /**
-     *  ...
+     *  Returns recently scraped data
      */
     public getData() {
         return this.$data
     }
 
+    /**
+     *  Closes BrowserService Session
+     */
+    public async stop() {
+        await this.browserService.closeBrowser();
+    }
 }

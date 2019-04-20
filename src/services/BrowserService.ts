@@ -24,15 +24,28 @@ export class BrowserService {
         return await this.$page.evaluate(el => document.querySelector(el).innerHTML, selector)
     }
 
+    /**
+     *  Check if the current page has an element
+     */
+    public async hasSelector(selector: string) {
+        console.log('check for selector: ' + selector)
+        try {
+           await this.$page.waitForSelector(selector, { timeout: 5000 })
+           console.log('found the selector')
+           return true
+        } catch (e) {
+            console.log('return false dawg')
 
-
+            return false
+        }
+    }
 
 
     /**
      *  Close Puppeteer Browser
      */
     public async closeBrowser() {
-        await this.$browser.close();
+        if (this.$browser) await this.$browser.close();
     }
 
     /**
