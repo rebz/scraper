@@ -42,6 +42,8 @@ site.scrape().then(() => {
 ```
 
 # TODO
+1. Abstract Puppeteer into `BrowserService`
+1. Inject `BrowserService` into `Scraper`
 1. Scraper Pagination
     - create `baseUri` from `uri`
     - create `path` from `uri`
@@ -49,12 +51,9 @@ site.scrape().then(() => {
     - parse value returned from `paginationPath` selector
     - ...
 1. Scraper Job
-    - define `frequency`
+    - define `frequency` number
+    - define `proxies` array
     - ...
-1. Remove axios
-    - create `HttpService` class
 1. Expand sanitization of retrieved values
-1. Add root configs (tslint, tsconfig, etc)
-1. Unit Tests
-1. Possibly move to headless chrome, Puppeteer
-1. Add to NPM
+1. Root configs setup (tslint, tsconfig, etc)
+1. Unit Tests (Mocha)
