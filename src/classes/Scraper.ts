@@ -1,14 +1,71 @@
 import { inject, injectable } from "inversify"
 import { BrowserService, BrowserServiceType } from './../services/BrowserService'
+import ScrapeSiteInterface from '../interfaces/ScrapeSiteInterface'
+import { cloneObjectUpdateValues, cleanScrapedValue } from '../helpers/scrape'
 
 @injectable()
 export default class Scraper {
 
+    protected $data: object;        // selector values
+    protected $uri: string;         // config
+    protected $selectors: object;   // config
+    
     public browserService: BrowserService;
 
     constructor (
         @inject(BrowserServiceType) browserService: BrowserService
     ) {
-        console.log('construct Scraper')
+        this.browserService = browserService;
+        this.$data = {}
     }
+    
+    /**
+     *  Sets the Class config for scraping data
+     *  @param {object} config - ScrapeSiteInterface
+     */
+    public setConfig(config: ScrapeSiteInterface) {
+        this.$uri = config.uri
+        this.$selectors = config.selectors
+        return this
+    }
+
+    /**
+     * Returns scraped data, determined by config
+     */
+    public async scrape() {
+        const selectorCheck = this.$selectors[Object.keys(this.$selectors)[0]] // get first element selector
+        await this.browserService.goTo(this.$uri, selectorCheck)
+        await this.retrieveSelectorValues()
+        return Promise.resolve(this);
+    }
+
+    private async retrieveSelectorValues() {
+        const selectors = this.$selectors
+        // const page = this.$page
+        const page = this.browserService
+        this.$data = await cloneObjectUpdateValues(selectors, async (selector) => 
+            await cleanScrapedValue(
+                await page.getValueFromSelector(selector)
+            )
+        );
+    }
+
+
+
+    private returnInstance() {
+        // return this
+    }
+
+    public async stop() {
+        await this.browserService.closeBrowser();
+    }
+
+
+    /**
+     *  ...
+     */
+    public getData() {
+        return this.$data
+    }
+
 }

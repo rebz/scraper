@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "jsx": "preserve",
         "baseUrl": ".",
         "typeRoots": ["types"],
         "types": ["reflect-metadata"],
@@ -12,5 +13,9 @@
         "allowJs": true,
         "paths": {}
     },
+    "exclude": [
+        "node_modules",
+        "**/node_modules/*"
+    ],
     "include": ["src/**/*"]
 }

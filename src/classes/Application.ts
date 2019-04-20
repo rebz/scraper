@@ -1,27 +1,37 @@
-import "reflect-metadata";
-import { Container } from "inversify";
+// import "reflect-metadata";
+// import { Container } from "inversify";
+// import ApplicationInterface from "./ApplicationInterface";
 
-declare global {
-    type AnyClass = { new (): any };
-}
+// declare global {
+//     type AnyClass = { new (): any };
+// }
 
-export default class Application {
+// export default class Application implements ApplicationInterface {
     
-    protected app;
-    public container: Container;
-    public test = 'test';
+//     protected app;
 
-    consutrctor() {
-        this.app = this;
-        this.container = new Container();
-        return this;
-    }
+//     protected container: Container;
 
-    public getContainer() {
-        return this.container;
-    }
+//     consutrctor() {
+//         this.app = this;
+//         globalThis.$app = this.app;
+//         this.container = new Container();
+//         this.constant("app", this.app);
+//     }
 
-    public bind<T>(abstract: string, concrete: AnyClass) {
-        this.container.bind(abstract).to(concrete)
-    }
-}
+//     public async boot(): Promise<ApplicationInterface> {
+//         return this;
+//     }
+
+//     public getContainer() {
+//         return this.container;
+//     }
+
+//     public bind<T>(abstract: string, concrete: AnyClass) {
+//         this.container.bind(abstract).to(concrete)
+//     }
+    
+//     public constant(key: string, constant: any) {
+//         this.container.bind(key).toConstantValue(constant);
+//     }
+// }
