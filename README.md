@@ -15,35 +15,45 @@ Scrape data from a website, pass an object with `{key: '#selector'}` and receive
 
 ```ts
 // index.ts
-import Scraper from './lib/classes/Scraper'
+import Scraper from './src/index'
 const config = {
     uri: 'http://example.com',
+    paginationSelector: false,
     selectors: {
         key1: 'span#key1selector',
         key2: 'span#key2selector',
         key3: 'span#key3selector',
     }
 };
-const site = new Scraper(config);
-site.scrape().then(() => {
-    console.log(site.getData())
-})
+(async () => {
+    const scraper = Scraper().setConfig(config);
+    await scraper.scrape()
+    console.log(scraper.getData())
+    
+    await scraper.goToPage('http://example2.com')
+    await scraper.scrape()
+    console.log(scraper.getData())
+
+    await scraper.stop()
+})()
 ```
 
 `ts-node index.ts` will produce:
 
-
 ```
 {
-    key1: 'html content from span with an id of #key1selector',
-    key2: 'html content from span with an id of #key2selector',
-    key3: 'html content from span with an id of #key3selector',
+    key1: 'example.com: innerHTML from selector',
+    key2: 'example.com: innerHTML from selector',
+    key3: 'example.com: innerHTML from selector',
+}
+{
+    key1: 'example2.com: innerHTML from selector',
+    key2: 'example2.com: innerHTML from selector',
+    key3: 'example2.com: innerHTML from selector',
 }
 ```
 
 # TODO
-1. Abstract Puppeteer into `BrowserService`
-1. Inject `BrowserService` into `Scraper`
 1. Scraper Pagination
     - create `baseUri` from `uri`
     - create `path` from `uri`
