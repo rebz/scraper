@@ -12,20 +12,22 @@
   },
   "keywords": [
     "typescript",
-    "scraper"
+    "scraper",
+    "puppeteer",
+    "inversify"
   ],
   "author": "Chris Johnson <chris@rebzmedia.com>",
   "license": "MIT",
   "homepage": "https://github.com/rebz/scraper#readme",
   "dependencies": {
-    "axios": "^0.18.0",
-    "cheerio": "^1.0.0-rc.3",
-    "esm": "^3.2.22",
     "puppeteer": "^1.14.0"
   },
   "devDependencies": {
     "@types/node": "^11.13.6",
     "@types/puppeteer": "^1.12.3",
+    "esm": "^3.2.22",
+    "inversify": "^5.0.1",
+    "reflect-metadata": "^0.1.13",
     "ts-node": "^8.1.0"
   }
 }
