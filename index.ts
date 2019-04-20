@@ -1,4 +1,4 @@
-import Scraper from './lib/classes/Scraper'
+import Scraper from './src/classes/Scraper'
 
 // this is an example, it does not actually work
 const config = {
