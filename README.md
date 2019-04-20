@@ -7,9 +7,9 @@ Scrape data from a website, pass an object with `{key: '#selector'}` and receive
 ## Goals of Project
 
 - Create `SiteModel` that will be fed into a new Scraper Class
-- Scraper class will accept a URI and a an object defining what to scrape
+- Scraper class will accept a URI and config defining what to scrape
 - An optional pagination selector may be passed into the Scraper Class to enable pagination
-- 
+- Scraped data will be passed back to `SiteModel` where data will be saved
 
 
 # Requirements
@@ -31,10 +31,13 @@ const config = {
     }
 };
 const site = new Scraper(config);
-site.scrape().then(console.log)
+site.scrape().then(() => {
+    console.log(site.getData())
+})
 ```
 
 `ts-node index.ts` will produce:
+
 
 ```
 {
