@@ -11,12 +11,6 @@ Scrape data from a website, pass an object with `{key: '#selector'}` and receive
 - An optional pagination selector may be passed into the Scraper Class to enable pagination
 - Scraped data will be passed back to `SiteModel` where data will be saved
 
-
-# Requirements
-
-* `npm i -g ts-node` or  `npm i -D ts-node`
-* `npm i -g typescript` or  `npm i -D typescript`
-
 # Example usage
 
 ```ts
