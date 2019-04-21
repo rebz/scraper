@@ -2,6 +2,6 @@
 export default interface ScrapeSite {
     uri: string;
     selectors: object;
-    paginationSelector?: string;
+    pagination?: any;
     // config: object;
 }

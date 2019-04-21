@@ -15,25 +15,44 @@ Scrape data from a website, pass an object with `{key: '#selector'}` and receive
 
 ```ts
 // index.ts
+
 import Scraper from './src/index'
+
 const config = {
     uri: 'http://example.com',
-    paginationSelector: false,
+    pagination: {
+        selector: 'div.prev_next',
+        // custom handler for determining next page
+        handler: async (currentUri: string, uris: any) => {
+            const url = new URL(currentUri)
+            const newPath = uris[Object.keys(uris).filter(k => k.indexOf('Prev') != -1)[0]]
+            return url.origin+newPath
+        }
+    },
     selectors: {
         key1: 'span#key1selector',
         key2: 'span#key2selector',
         key3: 'span#key3selector',
     }
 };
+
+// your custom scrape function
 (async () => {
     const scraper = Scraper().setConfig(config);
+
+    // single scrape
     await scraper.scrape()
     console.log(scraper.getData())
     
+    // go to another page and single scrape
     await scraper.goToPage('http://example2.com')
     await scraper.scrape()
     console.log(scraper.getData())
 
+    // auto scrape and use config.pagination
+    await scrapper.autoScrape()
+
+    // end BrowserSession
     await scraper.stop()
 })()
 ```
@@ -54,15 +73,13 @@ const config = {
 ```
 
 # TODO
-1. Scraper Pagination
-    - create `baseUri` from `uri`
-    - create `path` from `uri`
-    - define `paginationPath` selector
-    - parse value returned from `paginationPath` selector
-    - ...
-1. Scraper Job
+1. `ScraperJob`
     - define `frequency` number
     - define `proxies` array
+    - ...
+1. `ScraperSiteInterface`
+    - Used for Model
+    - `save()` method to save to "DB"
     - ...
 1. Expand sanitization of retrieved values
 1. Root configs setup (tslint, tsconfig, etc)

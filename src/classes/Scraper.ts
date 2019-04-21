@@ -8,8 +8,11 @@ export default class Scraper {
 
     protected $data: object;                // selector values
     protected $uri: string;                 // config
+    protected $baseUri: string;                 // config
     protected $selectors: object;           // config
-    protected $paginationSelector: string;  // selector value
+    
+    protected $paginationSelector: string;
+    protected $paginationHandler: any;
     
     public browserService: BrowserService;
 
@@ -27,7 +30,9 @@ export default class Scraper {
     public setConfig(config: ScrapeSiteInterface) {
         this.$uri = config.uri
         this.$selectors = config.selectors
-        this.$paginationSelector = config.paginationSelector
+        const { selector, handler } = config.pagination
+        this.$paginationHandler = handler
+        this.$paginationSelector = selector
         return this
     }
 
@@ -38,6 +43,25 @@ export default class Scraper {
         await this.goToPage()
         await this.retrieveSelectorValues()
         return Promise.resolve(this);
+    }
+
+    public async autoScrape() {
+        // console.clear()
+        console.log('AUTO SCRAPING')
+        console.log('-------------')
+
+        await this.scrape()
+        console.log(this.getData())
+
+        while (await this.hasNext()) {
+            const next = await this.getNext()
+            const uri = await this.$paginationHandler(this.$uri, next)
+            
+            await this.goToPage(uri)
+            await this.scrape()
+
+            console.log(this.getData())
+        }
     }
 
     public async goToPage(uri?: string) {
@@ -57,8 +81,6 @@ export default class Scraper {
         );
     }
 
-
-    
     /**
      *  Checks if there is an additional page to scrape
      */
@@ -66,7 +88,18 @@ export default class Scraper {
         if (!this.$paginationSelector) {
             return false
         }
-        return await this.browserService.hasSelector(this.$paginationSelector)        
+        return await this.browserService.hasSelector(this.$paginationSelector)
+    }
+
+    
+    /**
+     *  Checks if there is an additional page to scrape
+     */
+    public async getNext() {
+        if (!this.$paginationSelector) {
+            return false
+        }
+        return await this.browserService.getUrisFromSelector(this.$paginationSelector)
     }
 
 
