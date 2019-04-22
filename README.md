@@ -15,7 +15,6 @@ Scrape data from a website, pass an object with `{key: '#selector'}` and receive
 
 ```ts
 // index.ts
-
 import Scraper from './src/index'
 
 const config = {
@@ -38,21 +37,28 @@ const config = {
 
 // your custom scrape function
 (async () => {
+
+    // Handler to save scraped data
+    const saveData = (data) => console.log(data)
+
+    // Setup Scraper
     const scraper = Scraper().setConfig(config);
 
-    // single scrape
+    // Scrape page and save
     await scraper.scrape()
-    console.log(scraper.getData())
-    
-    // go to another page and single scrape
-    await scraper.goToPage('http://example2.com')
-    await scraper.scrape()
-    console.log(scraper.getData())
+    await saveData(scraper.getData())
 
-    // auto scrape and use config.pagination
-    await scrapper.autoScrape()
+    // ...go to another page, scrape, and save
+    await scraper.scrape('http://example.com')
+    await saveData(scraper.getData())
 
-    // end BrowserSession
+    // ...or listen for scrape and apply handler
+    await scraper.listen(saveData)
+
+    // if pagination is set you may auto scrape
+    await scraper.autoScrape()
+
+    // close the active browser session when finished
     await scraper.stop()
 })()
 ```
@@ -60,16 +66,25 @@ const config = {
 `ts-node index.ts` will produce:
 
 ```
-{
-    key1: 'example.com: innerHTML from selector',
-    key2: 'example.com: innerHTML from selector',
-    key3: 'example.com: innerHTML from selector',
+// scrape
+{ 
+    uri: 'http://example.com',
+    scraped: { 
+        key1: 'example.com: innerHTML from selector',
+        key2: 'example.com: innerHTML from selector',
+        key3: 'example.com: innerHTML from selector'
+    } 
 }
-{
-    key1: 'example2.com: innerHTML from selector',
-    key2: 'example2.com: innerHTML from selector',
-    key3: 'example2.com: innerHTML from selector',
+// scrape
+{ 
+    uri: 'http://example2.com',
+    scraped: { 
+        key1: 'example2.com: innerHTML from selector',
+        key2: 'example2.com: innerHTML from selector',
+        key3: 'example2.com: innerHTML from selector'
+    } 
 }
+// ...auto scrape objects after
 ```
 
 # TODO
