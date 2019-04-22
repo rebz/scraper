@@ -8,7 +8,7 @@ export default class Scraper {
 
     protected $data: object;                // selector values
     protected $uri: string;                 // config
-    protected $baseUri: string;                 // config
+    protected $baseUri: string;             // config
     protected $selectors: object;           // config
     
     protected $paginationSelector: string;
@@ -16,10 +16,14 @@ export default class Scraper {
     
     public browserService: BrowserService;
 
+    protected $listening: boolean;
+    protected $listenHandler: (data: object) => void;
+
     constructor (
         @inject(BrowserServiceType) browserService: BrowserService
     ) {
         this.browserService = browserService;
+        this.$listening = false
         this.$data = {}
     }
     
@@ -37,44 +41,58 @@ export default class Scraper {
     }
 
     /**
-     * Returns scraped data, determined by config
+     *  Returns scraped data, determined by config
+     *  @param {string} uri
      */
-    public async scrape() {
+    public async scrape(uri?: string) {
+        if (uri) this.$uri = await uri
         await this.goToPage()
-        await this.retrieveSelectorValues()
-        return Promise.resolve(this);
+        this.$data = await this.retrieveSelectorValues()
+        await this.$listening && this.$listenHandler(this.getData())
     }
 
+    /**
+     *  ...
+     */
+    public listen(listenHandler: (data: object) => void) {
+        this.$listening = true
+        this.$listenHandler = listenHandler;
+    }
+
+    /**
+     *  Auto-Srape
+     */
     public async autoScrape() {
-        // console.clear()
-        console.log('AUTO SCRAPING')
-        console.log('-------------')
+
+        if (!this.$paginationHandler || !this.$paginationSelector) {
+            return false
+        }
 
         await this.scrape()
-        console.log(this.getData())
 
         while (await this.hasNext()) {
             const next = await this.getNext()
             const uri = await this.$paginationHandler(this.$uri, next)
-            
-            await this.goToPage(uri)
-            await this.scrape()
-
-            console.log(this.getData())
+            await this.scrape(uri)
         }
     }
 
-    public async goToPage(uri?: string) {
-        if (uri) this.$uri = uri
+    /**
+     *  Navigate to a new Webpage
+     */
+    private async goToPage() {
         const selectorCheck = this.$selectors[Object.keys(this.$selectors)[0]] // get first element selector
         await this.browserService.goTo(this.$uri, selectorCheck)
     }
 
+    /**
+     *  Returns the innerHTML of a all selector values
+     */
     private async retrieveSelectorValues() {
         const selectors = this.$selectors
         // const page = this.$page
         const page = this.browserService
-        this.$data = await cloneObjectUpdateValues(selectors, async (selector) => 
+        return await cloneObjectUpdateValues(selectors, async (selector) => 
             await cleanScrapedValue(
                 await page.getValueFromSelector(selector)
             )
@@ -90,7 +108,6 @@ export default class Scraper {
         }
         return await this.browserService.hasSelector(this.$paginationSelector)
     }
-
     
     /**
      *  Checks if there is an additional page to scrape
@@ -102,16 +119,18 @@ export default class Scraper {
         return await this.browserService.getUrisFromSelector(this.$paginationSelector)
     }
 
-
     /**
-     *  Returns recently scraped data
+     *  Return recently scraped data and the Uri where originated
      */
     public getData() {
-        return this.$data
+        return {
+            uri: this.$uri,
+            scraped: this.$data
+        }
     }
 
     /**
-     *  Closes BrowserService Session
+     *  Close the BrowserService Session
      */
     public async stop() {
         await this.browserService.closeBrowser();
