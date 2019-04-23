@@ -99,3 +99,6 @@ const config = {
 1. Expand sanitization of retrieved values
 1. Root configs setup (tslint, tsconfig, etc)
 1. Unit Tests (Mocha)
+
+# Bugs
+1. If innerHTML is null we should return null instead of error

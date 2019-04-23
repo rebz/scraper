@@ -13,14 +13,27 @@ export class BrowserService {
      */
     public async goTo(uri: string, selector: string) {
         await this.pageCheck();
-        await this.$page.goto(uri);
+        await this.$page.goto(uri, {
+            waitUntil: 'networkidle2',
+            timeout: 3000000
+        });
         await this.$page.waitForSelector(selector); // check if element has loaded
     }
 
+    /**
+     *  Return innerHTML from selector value
+     *  @param {string} selector
+     */
     public async getValueFromSelector(selector: string) {
+        // @TODO - Check if querySelector exists before attempting to get innerHTML... may return null
         return await this.$page.evaluate(el => document.querySelector(el).innerHTML, selector)
     }
 
+    /**
+     *  Return an Object where the key defines the link
+     *  text and the value defines the link href
+     *  @param {string} selector
+     */
     public async getUrisFromSelector(selector: string) {
         return await this.$page.evaluate(el => {
             const anchors = document.querySelector(el).getElementsByTagName('a')
