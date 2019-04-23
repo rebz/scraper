@@ -26,7 +26,7 @@ export class BrowserService {
      */
     public async getValueFromSelector(selector: string) {
         // @TODO - Check if querySelector exists before attempting to get innerHTML... may return null
-        return await this.$page.evaluate(el => document.querySelector(el).innerHTML, selector)
+        return await this.$page.evaluate(el => document.querySelector(el) && document.querySelector(el).innerHTML, selector)
     }
 
     /**

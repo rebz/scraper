@@ -12,5 +12,6 @@ export const cloneObjectUpdateValues = async (object: object, callback: (s: stri
 }
 
 export const cleanScrapedValue = (s: string) => {
+    if (!s) return null
     return s.replace(/\r?\n|\r/g, '').trim();
 }

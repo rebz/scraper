@@ -19,11 +19,15 @@ export default class Scraper {
     protected $listening: boolean;
     protected $listenHandler: (data: object) => void;
 
+    protected $errors: boolean;
+    protected $errorHandler: (data: object) => void;
+
     constructor (
         @inject(BrowserServiceType) browserService: BrowserService
     ) {
         this.browserService = browserService;
         this.$listening = false
+        this.$errors = false
         this.$data = {}
     }
     
@@ -46,9 +50,15 @@ export default class Scraper {
      */
     public async scrape(uri?: string) {
         if (uri) this.$uri = await uri
-        await this.goToPage()
-        this.$data = await this.retrieveSelectorValues()
-        await this.$listening && this.$listenHandler(this.getData())
+
+        try {
+            await this.goToPage()
+            this.$data = await this.retrieveSelectorValues()
+            await this.$listening && this.$listenHandler(this.getData())
+
+        } catch (e) {
+            await this.$errors && this.$errorHandler(e)
+        }
     }
 
     /**
@@ -57,6 +67,14 @@ export default class Scraper {
     public listen(listenHandler: (data: object) => void) {
         this.$listening = true
         this.$listenHandler = listenHandler;
+    }
+
+    /**
+     *  ...
+     */
+    public errors(errorHandler: (data: object) => void) {
+        this.$errors = true
+        this.$errorHandler = errorHandler;
     }
 
     /**
