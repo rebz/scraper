@@ -11,11 +11,13 @@
         "emitDecoratorMetadata": true,
         "module": "commonjs",
         "allowJs": true,
-        "paths": {}
+        "paths": {},
+        "suppressImplicitAnyIndexErrors": true
     },
     "exclude": [
         "node_modules",
-        "**/node_modules/*"
+        "**/node_modules/*",
+        "**/__tests__/*"
     ],
     "include": ["src/**/*"]
 }

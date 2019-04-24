@@ -27,7 +27,12 @@ export default class Scraper {
     ) {
         this.browserService = browserService;
         this.errorService = errorService;
+
+        this.$selectors = {}
+        this.$uri = ''
+        this.$paginationSelector = ''
         this.$listening = false
+        this.$listenHandler = () => {}
         this.$data = {}
     }
     
@@ -72,7 +77,7 @@ export default class Scraper {
     /**
      *  ...
      */
-    public errors(errorHandler: (ErrorHandlerInterface) => void) {
+    public errors(errorHandler: (arg0: ErrorHandlerInterface) => void) {
         this.errorService.setHandler(errorHandler)
     }
 
@@ -90,6 +95,7 @@ export default class Scraper {
         while (await this.hasNext()) {
             const next = await this.getNext()
             const uri = await this.$paginationHandler(this.$uri, next)
+            if (!uri || uri === this.$uri) break
             await this.scrape(uri)
         }
     }
@@ -98,7 +104,7 @@ export default class Scraper {
      *  Navigate to a new Webpage
      */
     private async goToPage() {
-        const selectorCheck = this.$selectors[Object.keys(this.$selectors)[0]] // get first element selector
+        const selectorCheck = Object.values(this.$selectors)[0] // get first element selector
         await this.browserService.goTo(this.$uri, selectorCheck)
     }
 

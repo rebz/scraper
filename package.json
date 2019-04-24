@@ -1,10 +1,11 @@
 {
-  "name": "scraper",
+  "name": "ts-scraper-rebz",
   "version": "0.0.1",
-  "description": "",
+  "description": "More scraping, less coding.",
   "main": "index.js",
   "scripts": {
-    "dev": "node -r esm index.js"
+    "dev": "node -r esm index.js",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -23,11 +24,12 @@
     "puppeteer": "^1.14.0"
   },
   "devDependencies": {
-    "@types/node": "^11.13.6",
+    "@types/node": "^11.13.7",
     "@types/puppeteer": "^1.12.3",
     "esm": "^3.2.22",
     "inversify": "^5.0.1",
     "reflect-metadata": "^0.1.13",
-    "ts-node": "^8.1.0"
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.5"
   }
 }

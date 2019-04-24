@@ -40,7 +40,7 @@ export class BrowserService {
      */
     public async getValueFromSelector(selector: string) {
         // @TODO - Check if querySelector exists before attempting to get innerHTML... may return null
-        return await this.$page.evaluate(el => document.querySelector(el) && document.querySelector(el).innerHTML, selector)
+        return await this.$page.evaluate((el: any) => document.querySelector(el) && document.querySelector(el).innerHTML, selector)
     }
 
     /**
@@ -49,14 +49,12 @@ export class BrowserService {
      *  @param {string} selector
      */
     public async getUrisFromSelector(selector: string) {
-        return await this.$page.evaluate(el => {
+        return await this.$page.evaluate((el: any) => {
             const anchors = document.querySelector(el).getElementsByTagName('a')
             const links = {};
-            
             for (let i = 0, length = anchors.length; i < length; i++) {
                 links[anchors[i].innerHTML] = anchors[i].getAttribute('href');
             }
-
             return links;
         }, selector)
     }
@@ -115,3 +113,7 @@ export class BrowserService {
 }
 
 export const BrowserServiceType = Symbol.for("BrowserService");
+
+export interface ISomeObject {
+
+}
