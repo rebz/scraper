@@ -3,16 +3,17 @@ import { injectable } from "inversify";
 @injectable()
 export class ErrorService {
 
-    protected handler: (error: object) => void;
+    protected handler: (object: object) => void;
 
     contructor () {
-        this.handler = console.error
+        this.handler = console.error // default handler
     }
 
     public async setHandler(callback: (ErrorHandlerInterface) => void) {
         this.handler = callback
     }
 
+    // @todo - cleanup, use Interface
     public async handle(uri: string, error: object) {
         this.handler({ 
             uri, 
