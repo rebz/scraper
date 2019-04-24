@@ -1,5 +1,6 @@
-import { injectable } from "inversify";
+import { injectable, inject } from "inversify";
 import * as puppeteer from 'puppeteer';
+import { ErrorService, ErrorServiceType } from './ErrorService'
 
 @injectable()
 export class BrowserService {
@@ -7,17 +8,30 @@ export class BrowserService {
     protected $browser: any;        // puppeteer browser instance
     protected $page: any;           // page object returned from this.$browser
 
+    public errorService: ErrorService;
+    
+    constructor (
+        @inject(ErrorServiceType) errorService: ErrorService
+    ) {
+        this.errorService = errorService;
+    }
+
     /**
      *  @param {string} uri - URL to visit
      *  @param {string} selector - Wait for element to appear on page
      */
     public async goTo(uri: string, selector: string) {
         await this.pageCheck();
-        await this.$page.goto(uri, {
-            waitUntil: 'networkidle2',
-            timeout: 3000000
-        });
-        await this.$page.waitForSelector(selector); // check if element has loaded
+        try {
+            await this.$page.goto(uri, {
+                waitUntil: 'networkidle2',
+                timeout: 3000000
+            });
+            await this.$page.waitForSelector(selector); // check if element has loaded
+        } catch (e) {
+            
+            return e
+        }
     }
 
     /**

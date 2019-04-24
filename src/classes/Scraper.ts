@@ -1,33 +1,33 @@
 import { inject, injectable } from "inversify"
 import { BrowserService, BrowserServiceType } from './../services/BrowserService'
+import { ErrorService, ErrorServiceType, ErrorHandlerInterface } from './../services/ErrorService'
+
 import ScrapeSiteInterface from '../interfaces/ScrapeSiteInterface'
 import { cloneObjectUpdateValues, cleanScrapedValue } from '../helpers/scrape'
 
 @injectable()
 export default class Scraper {
 
-    protected $data: object;                // selector values
-    protected $uri: string;                 // config
-    protected $baseUri: string;             // config
-    protected $selectors: object;           // config
+    protected $data: object;
+    protected $uri: string;
+    protected $selectors: object;
     
     protected $paginationSelector: string;
     protected $paginationHandler: any;
     
     public browserService: BrowserService;
+    public errorService: ErrorService;
 
     protected $listening: boolean;
     protected $listenHandler: (data: object) => void;
 
-    protected $errors: boolean;
-    protected $errorHandler: (data: object) => void;
-
     constructor (
-        @inject(BrowserServiceType) browserService: BrowserService
+        @inject(BrowserServiceType) browserService: BrowserService,
+        @inject(ErrorServiceType) errorService: ErrorService
     ) {
         this.browserService = browserService;
+        this.errorService = errorService;
         this.$listening = false
-        this.$errors = false
         this.$data = {}
     }
     
@@ -57,7 +57,7 @@ export default class Scraper {
             await this.$listening && this.$listenHandler(this.getData())
 
         } catch (e) {
-            await this.$errors && this.$errorHandler(e)
+            await this.errorService.handle(this.$uri, e)
         }
     }
 
@@ -72,9 +72,8 @@ export default class Scraper {
     /**
      *  ...
      */
-    public errors(errorHandler: (data: object) => void) {
-        this.$errors = true
-        this.$errorHandler = errorHandler;
+    public errors(errorHandler: (ErrorHandlerInterface) => void) {
+        this.errorService.setHandler(errorHandler)
     }
 
     /**
