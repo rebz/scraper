@@ -41,8 +41,14 @@ const config = {
     // Handler to save scraped data
     const saveData = (data) => console.log(data)
 
+    // Handler for errors
+    const customErrorHandler = (error) => console.error(error)
+
     // Setup Scraper
     const scraper = Scraper().setConfig(config);
+
+    // Define a custom Error Handler, returns URI and Error
+    await scraper.errors(customErrorHandler)
 
     // Scrape page and save
     await scraper.scrape()
@@ -99,6 +105,3 @@ const config = {
 1. Expand sanitization of retrieved values
 1. Root configs setup (tslint, tsconfig, etc)
 1. Unit Tests (Mocha)
-
-# Bugs
-1. If innerHTML is null we should return null instead of error
