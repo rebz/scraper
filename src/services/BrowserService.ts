@@ -49,6 +49,8 @@ export class BrowserService {
      *  @param {string} selector
      */
     public async getUrisFromSelector(selector: string) {
+        console.info('BrowserService->getUrisFromSelector()')
+        console.info(selector)
         return await this.$page.evaluate((el: any) => {
             const anchors = document.querySelector(el).getElementsByTagName('a')
             const links = {};

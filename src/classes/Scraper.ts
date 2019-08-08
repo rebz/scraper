@@ -89,13 +89,20 @@ export default class Scraper {
         if (!this.$paginationHandler || !this.$paginationSelector) {
             return false
         }
-
         await this.scrape()
 
         while (await this.hasNext()) {
             const next = await this.getNext()
             const uri = await this.$paginationHandler(this.$uri, next)
-            if (!uri || uri === this.$uri) break
+
+            if (!uri || uri === this.$uri) {
+                await this.errorService.handle(this.$uri, {
+                    message: `Pagination Handler returned: ${uri}`, // TODO : cleanse uri var, improve error
+                    name: 'Scraper Message',
+                })
+                break
+            }
+            
             await this.scrape(uri)
         }
     }
@@ -134,11 +141,16 @@ export default class Scraper {
     
     /**
      *  Checks if there is an additional page to scrape
+     *  --------------------------------------------------------
+     *  Uses `paginationSelector`, an HTML Class or ID attribute 
+     *  value for finding
      */
     public async getNext() {
         if (!this.$paginationSelector) {
             return false
         }
+        console.info('get next')
+        console.info(this.$paginationSelector)
         return await this.browserService.getUrisFromSelector(this.$paginationSelector)
     }
 
