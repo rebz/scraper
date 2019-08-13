@@ -19,16 +19,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
-const puppeteer = __importStar(require("puppeteer"));
+const puppeteer_1 = __importDefault(require("puppeteer"));
 const ErrorService_1 = require("./ErrorService");
 let BrowserService = class BrowserService {
     constructor(errorService) {
@@ -101,7 +97,7 @@ let BrowserService = class BrowserService {
     }
     openBrowser() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.$browser = yield puppeteer.launch();
+            this.$browser = yield puppeteer_1.default.launch();
         });
     }
     closeBrowser() {

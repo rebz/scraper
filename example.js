@@ -4,7 +4,7 @@ const config = {
     uri: 'https://www.example.com/',
     pagination: {
         selector: 'div.prev_next',
-        handler: async (currentUri: string, uris: any) => {
+        handler: async (currentUri, uris) => {
             const url = new URL(currentUri)
             const newPath = uris[Object.keys(uris).filter(k => k.indexOf('Next') != -1)[0]]
             return newPath && url.origin+newPath

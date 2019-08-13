@@ -105,6 +105,8 @@ export default class Scraper {
             
             await this.scrape(uri)
         }
+
+        return false;
     }
 
     /**

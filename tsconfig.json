@@ -3,19 +3,20 @@
         "module": "commonjs",
         "removeComments": true,
         "sourceMap": true,
-        "target": "es2016", // NodeJs v8.9.3 supports most of the "es6" features
+        "target": "es6", // NodeJs v8.9.3 supports most of the "es6" features
         "pretty": true,
+        "declaration": true,
         "outDir": "dist", // "./build",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "typeRoots": ["types"],
         "types": ["reflect-metadata", "node"],
         "moduleResolution": "node",
-        "allowJs": true,
+        "noImplicitReturns": true,
+        // "allowJs": true,
         "suppressImplicitAnyIndexErrors": true,
         "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "lib": ["es2016", "dom"] // No need for "es5" if you have "es6"
+        "esModuleInterop": true // do not use `import * as service from '...'`, you must use `import service from '...'`
     },
     "include": [
         "src/**/*.ts"

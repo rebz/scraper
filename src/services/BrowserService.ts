@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import * as puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer';
 import { ErrorService, ErrorServiceType } from './ErrorService'
 
 @injectable()

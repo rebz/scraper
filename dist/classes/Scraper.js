@@ -82,6 +82,7 @@ let Scraper = class Scraper {
                 }
                 yield this.scrape(uri);
             }
+            return false;
         });
     }
     goToPage() {
