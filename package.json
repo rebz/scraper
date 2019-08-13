@@ -2,10 +2,10 @@
   "name": "ts-scraper-rebz",
   "version": "0.0.1",
   "description": "More scraping, less coding.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "node -r esm index.js",
-    "build": "tsc"
+    "build": "tsc --esModuleInterop"
   },
   "repository": {
     "type": "git",

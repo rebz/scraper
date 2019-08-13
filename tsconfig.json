@@ -3,17 +3,19 @@
         "module": "commonjs",
         "removeComments": true,
         "sourceMap": true,
-        "target": "es5",
-        "outDir": "dist",
+        "target": "es2016", // NodeJs v8.9.3 supports most of the "es6" features
+        "pretty": true,
+        "outDir": "dist", // "./build",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "typeRoots": ["types"],
-        "types": ["reflect-metadata"],
+        "types": ["reflect-metadata", "node"],
         "moduleResolution": "node",
-        "baseUrl": ".",
         "allowJs": true,
-        "paths": {},
-        "suppressImplicitAnyIndexErrors": true
+        "suppressImplicitAnyIndexErrors": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "lib": ["es2016", "dom"] // No need for "es5" if you have "es6"
     },
     "include": [
         "src/**/*.ts"
