@@ -1,6 +1,6 @@
 {
   "name": "@rebz/scraper",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "More scraping, less coding.",
   "main": "dist/index.js",
   "scripts": {
@@ -31,5 +31,10 @@
     "esm": "^3.2.25",
     "ts-node": "^8.3.0",
     "typescript": "^3.5.3"
-  }
+  },
+  "files": [
+    "dist",
+    "src",
+    "example.js"
+  ]
 }
