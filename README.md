@@ -1,8 +1,6 @@
 # Scraper
 
-> WIP
-
-Scrape data from a website, pass an object with `{key: '#selector'}` and receive `{key: 'selector value'}`
+> WIP &mdash; Scrape data from a website, pass an object with `{key: '#selector'}` and receive `{key: 'selector value'}`
 
 ## Goals of Project
 
@@ -11,18 +9,22 @@ Scrape data from a website, pass an object with `{key: '#selector'}` and receive
 - An optional pagination selector may be passed into the Scraper Class to enable pagination
 - Scraped data will be passed back to `SiteModel` where data will be saved
 
+## Install
+
+`npm i @rebz/scraper`
+
 # Example usage
 
-```ts
-// index.ts
-import Scraper from './src/index'
+```js
+// index.js
+const Scraper = require('./dist/index').default
 
 const config = {
     uri: 'http://example.com',
-    pagination: {
-        selector: 'div.prev_next',
+    pagination: { // custom pagination handler
+        selector: 'div.prev_next', // element/classname selector of target
         // custom handler for determining next page
-        handler: async (currentUri: string, uris: any) => {
+        handler: async (currentUri, uris) => {
             const url = new URL(currentUri)
             const newPath = uris[Object.keys(uris).filter(k => k.indexOf('Prev') != -1)[0]]
             return url.origin+newPath
@@ -69,7 +71,7 @@ const config = {
 })()
 ```
 
-`ts-node index.ts` will produce:
+`node index.js` will produce:
 
 ```
 // scrape
