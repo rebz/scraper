@@ -1,6 +1,6 @@
 {
   "name": "@rebz/scraper",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "More scraping, less coding.",
   "main": "dist/index.js",
   "scripts": {
