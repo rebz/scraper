@@ -30,7 +30,8 @@ export default class Scraper {
 
         this.$selectors = {}
         this.$uri = ''
-        this.$paginationSelector = ''
+        this.$paginationHandler = null
+        this.$paginationSelector = null
         this.$listening = false
         this.$listenHandler = () => {}
         this.$data = {}
@@ -43,9 +44,11 @@ export default class Scraper {
     public setConfig(config: ScrapeSiteInterface) {
         this.$uri = config.uri
         this.$selectors = config.selectors
-        const { selector, handler } = config.pagination
-        this.$paginationHandler = handler
-        this.$paginationSelector = selector
+        if (!!config.pagination) {
+            const { selector, handler } = config.pagination
+            this.$paginationHandler = handler
+            this.$paginationSelector = selector
+        }
         return this
     }
 
@@ -85,11 +88,12 @@ export default class Scraper {
      *  Auto-Srape
      */
     public async autoScrape() {
+        
+        await this.scrape()
 
         if (!this.$paginationHandler || !this.$paginationSelector) {
             return false
         }
-        await this.scrape()
 
         while (await this.hasNext()) {
             const next = await this.getNext()
@@ -106,7 +110,7 @@ export default class Scraper {
             await this.scrape(uri)
         }
 
-        return false;
+        return false
     }
 
     /**
@@ -151,8 +155,6 @@ export default class Scraper {
         if (!this.$paginationSelector) {
             return false
         }
-        console.info('get next')
-        console.info(this.$paginationSelector)
         return await this.browserService.getUrisFromSelector(this.$paginationSelector)
     }
 
